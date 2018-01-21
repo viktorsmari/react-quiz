@@ -37,6 +37,7 @@ class Question extends React.Component {
       score: 0,
       questionAnswered: false,
       total: data.length,
+      correctAnswer: data.map((outer) => outer.correct)
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -61,10 +62,17 @@ class Question extends React.Component {
     e.preventDefault();
   }
 
-  selectAnswer(index, e) {
-    //console.log(index);
+  selectAnswer(answerIndex, e, questionIndex) {
+    //console.log(answerIndex);
+    //console.log(questionIndex);
     //console.log(e);
     //console.log(this);
+    console.log(this.state.correctAnswer[questionIndex]);
+
+    if(this.state.correctAnswer[questionIndex] === (answerIndex + 1)){
+      console.log('correct');
+    }
+
 
     // Apply CSS class
     if (e.target.className === 'selected') {
@@ -81,15 +89,15 @@ class Question extends React.Component {
   render() {
 
     // This will print all questions on one page
-    var startQuiz = data.map((item, index) => {
+    var startQuiz = data.map((item, questionIndex) => {
       return (
-        <div key={index}>
-          <h3>{item.question} ({index + 1} / {this.state.total}) Correct: {item.correct} </h3>
+        <div key={questionIndex}>
+          <h3>{item.question} ({questionIndex + 1} / {this.state.total}) Correct: {item.correct} </h3>
           <ul>
             {
               item.answers.map((answer, i) => {
                 return (
-                  <li key={i} className={'correct' } onClick={(e) => this.selectAnswer(i, e)}>(i{i}) {answer}</li>
+                  <li key={i} className={'correct' } onClick={(e) => this.selectAnswer(i, e, questionIndex)}>(i{i}) {answer}</li>
                   //<Answer key={i}  answer={answer}/>
                 )
               })
