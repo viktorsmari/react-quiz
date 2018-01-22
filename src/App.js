@@ -11,6 +11,7 @@ function Quiz() {
   );
 }
 
+  /*
 class Answer extends React.Component {
   constructor(props){
     super(props);
@@ -27,6 +28,7 @@ class Answer extends React.Component {
 
   }
 }
+*/
 
 class Question extends React.Component {
   constructor(props) {
@@ -37,6 +39,7 @@ class Question extends React.Component {
       score: 0,
       questionAnswered: false,
       total: data.length,
+      guesses: [],
       correctAnswer: data.map((outer) => outer.correct)
     };
     this.handleChange = this.handleChange.bind(this);
@@ -60,6 +63,16 @@ class Question extends React.Component {
     console.log('submitting..');
     console.log(this);
     e.preventDefault();
+
+    // TODO
+    // iterate through guesses and correctAnswer and compare them
+    if (true) {
+      this.setState({
+        score : this.state.score + 1
+      });
+    }
+    console.log(this.state.guesses)
+
   }
 
   selectAnswer(answerIndex, e, questionIndex) {
@@ -67,11 +80,19 @@ class Question extends React.Component {
     //console.log(questionIndex);
     //console.log(e);
     //console.log(this);
-    console.log(this.state.correctAnswer[questionIndex]);
+    //console.log(this.state.correctAnswer[questionIndex]);
 
+    // When we click (not submit) the correct answer, if we want INSTANT valuation
+    // Arrays start at 0 but the 'correct' in data.js starts at 1
     if(this.state.correctAnswer[questionIndex] === (answerIndex + 1)){
       console.log('correct');
     }
+
+    // Fill the guesses array.
+    // In react we cannot overwrite an array, we need to copy and replace it.
+    let newGuess = this.state.guesses.slice() // copy the array
+    newGuess[questionIndex] = answerIndex;
+    this.setState({ guesses: newGuess })
 
 
     // Apply CSS class
@@ -81,9 +102,6 @@ class Question extends React.Component {
       e.target.className = 'selected'
     }
 
-    this.setState({
-      score : this.state.score + 1
-    })
   }
 
   render() {
@@ -117,7 +135,7 @@ class Question extends React.Component {
           <button onClick={this.prevQuestion}>Previous</button>
           <button onClick={this.nextQuestion}>Next</button> <br />
 
-          <input type="submit" value="Submit / Calculate" /> <br />
+          <input type="submit" value="Show scores / Calculate" /> <br />
           Score: {this.state.score}
         </form>
       </div>
