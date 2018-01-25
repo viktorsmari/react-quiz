@@ -49,14 +49,16 @@ class Question extends React.Component {
 
     // TODO
     // iterate through guesses and correctAnswer and compare them
+    let tmpScore = 0;
     this.state.correctAnswer.map((x, index) => {
       if (x === this.state.guesses[index]){
-        this.setState({
-          score: this.state.score + 1
-        });
+        tmpScore += 1;
       }
     })
 
+    this.setState({
+      score: this.state.score = tmpScore
+    });
     // Apply CSS class
     /*
     if (e.target.className === 'selected') {
