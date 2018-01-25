@@ -57,7 +57,7 @@ class Question extends React.Component {
 
     // Update total score
     this.setState({
-      score: this.state.score = tmpScore
+      score: tmpScore
     });
 
     // TODO
