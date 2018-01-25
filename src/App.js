@@ -11,25 +11,6 @@ function Quiz() {
   );
 }
 
-  /*
-class Answer extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      //key: props.mykey,
-      //answer: props.answer,
-    }
-    console.log(this.props.mykey, this.state)
-  }
-  render() {
-    return(
-      <li className={'correct' } onClick={(e) => this.selectAnswer(this.props.key, e)}>(i{this.props.key}) {this.props.answer}</li>
-    )
-
-  }
-}
-*/
-
 class Question extends React.Component {
   constructor(props) {
     super(props);
@@ -40,7 +21,8 @@ class Question extends React.Component {
       questionAnswered: false,
       total: data.length,
       guesses: [],
-      correctAnswer: data.map((outer) => outer.correct)
+      correctAnswer: data.map((outer) => outer.correct - 1)
+      // -1 because the data.js starts counting on 1 but arrays start on 0
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -60,18 +42,29 @@ class Question extends React.Component {
   }
 
   handleSubmit(e) {
-    console.log('submitting..');
-    console.log(this);
+    //console.log(this);
+    console.log('Guesses:' , this.state.guesses)
+    console.log('Correct:', this.state.correctAnswer)
     e.preventDefault();
 
     // TODO
     // iterate through guesses and correctAnswer and compare them
-    if (true) {
-      this.setState({
-        score : this.state.score + 1
-      });
+    this.state.correctAnswer.map((x, index) => {
+      if (x === this.state.guesses[index]){
+        this.setState({
+          score: this.state.score + 1
+        });
+      }
+    })
+
+    // Apply CSS class
+    /*
+    if (e.target.className === 'selected') {
+      e.target.className = ''
+    }else{
+      e.target.className = 'selected'
     }
-    console.log(this.state.guesses)
+    */
 
   }
 
@@ -83,8 +76,7 @@ class Question extends React.Component {
     //console.log(this.state.correctAnswer[questionIndex]);
 
     // When we click (not submit) the correct answer, if we want INSTANT valuation
-    // Arrays start at 0 but the 'correct' in data.js starts at 1
-    if(this.state.correctAnswer[questionIndex] === (answerIndex + 1)){
+    if(this.state.correctAnswer[questionIndex] === (answerIndex)){
       console.log('correct');
     }
 
@@ -93,14 +85,6 @@ class Question extends React.Component {
     let newGuess = this.state.guesses.slice() // copy the array
     newGuess[questionIndex] = answerIndex;
     this.setState({ guesses: newGuess })
-
-
-    // Apply CSS class
-    if (e.target.className === 'selected') {
-      e.target.className = ''
-    }else{
-      e.target.className = 'selected'
-    }
 
   }
 
@@ -111,16 +95,17 @@ class Question extends React.Component {
       return (
         <div key={questionIndex}>
           <h3>{item.question} ({questionIndex + 1} / {this.state.total}) Correct: {item.correct} </h3>
-          <ul>
             {
               item.answers.map((answer, i) => {
                 return (
-                  <li key={i} className={'correct' } onClick={(e) => this.selectAnswer(i, e, questionIndex)}>(i{i}) {answer}</li>
-                  //<Answer key={i}  answer={answer}/>
+                  <div key={i} className="radio">
+                    <label>
+                      <input checked={this.state.guesses[questionIndex] === i} type="radio" value="{i}" onClick={(e) => this.selectAnswer(i, e, questionIndex)} />(i{i}) {answer}
+                    </label>
+                  </div>
                 )
               })
             }
-          </ul>
         </div>
       )
     })
