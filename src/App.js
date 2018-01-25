@@ -47,7 +47,6 @@ class Question extends React.Component {
     console.log('Correct:', this.state.correctAnswer)
     e.preventDefault();
 
-    // TODO
     // iterate through guesses and correctAnswer and compare them
     let tmpScore = 0;
     this.state.correctAnswer.map((x, index) => {
@@ -56,10 +55,13 @@ class Question extends React.Component {
       }
     })
 
+    // Update total score
     this.setState({
       score: this.state.score = tmpScore
     });
-    // Apply CSS class
+
+    // TODO
+    // Apply CSS class to correct / incorrect answers
     /*
     if (e.target.className === 'selected') {
       e.target.className = ''
